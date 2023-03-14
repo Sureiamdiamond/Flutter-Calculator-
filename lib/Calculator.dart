@@ -5,6 +5,7 @@ class Calculator extends StatefulWidget {
   const Calculator({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CalculatorState createState() => _CalculatorState();
 }
 
@@ -21,7 +22,7 @@ class _CalculatorState extends State<Calculator> {
         backgroundColor: MaterialStatePropertyAll(buttonColor),
         padding: const MaterialStatePropertyAll(EdgeInsets.all(17)),
       ),
-      child: Text('$buttonText',
+      child: Text(buttonText,
         style: TextStyle(
           fontSize: 33,
           color: textColor,
@@ -40,7 +41,7 @@ class _CalculatorState extends State<Calculator> {
         backgroundColor: MaterialStatePropertyAll(buttonColor),
         padding: const MaterialStatePropertyAll(EdgeInsets.all(20)),
       ),
-      child: Text('$buttonText',
+      child: Text(buttonText,
         style: TextStyle(
           fontSize: 35,
           color: textColor,
@@ -55,8 +56,9 @@ class _CalculatorState extends State<Calculator> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0.8,
-        title: const Text('Calculator' , style: TextStyle(color:  Color(0xFF15244D)),),
+        elevation: 0.3,
+        shadowColor:  Colors.blueGrey[500],
+        title:  Text('Calculator' , style: TextStyle(color: Colors.blueGrey[500] , fontSize: 37 , fontWeight: FontWeight.bold),),
         backgroundColor: Colors.white,
       ),
       body: Padding(
@@ -70,28 +72,31 @@ class _CalculatorState extends State<Calculator> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8,10,13,5),
-                    child: Text('$text',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        color: Color(0xFF15244D),
-                        fontSize: 80,
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8,10,13,5),
+                      child: Text('$text',
+                        overflow: TextOverflow.visible,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          color: Color(0xFF15244D),
+                          fontSize: 62,
+                        ),
                       ),
                     ),
                   )
                 ],
               ),
             ),
-            Divider(),
-            SizedBox(height: 1,),
+            const Divider(),
+            const SizedBox(height: 1,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 calButton1('AC',Colors.grey,Colors.black),
                 calButton1('+/-',Colors.grey,Colors.black),
                 calButton1(' % ',Colors.grey,Colors.black),
-                calButton('  /  ',Color(0xFF5079DF),Colors.white),
+                calButton('  /  ',const Color(0xFF5079DF),Colors.white),
               ],
             ),
             const SizedBox(height: 10,),
@@ -103,7 +108,7 @@ class _CalculatorState extends State<Calculator> {
                 calButton('9',Colors.blueGrey[500]!,Colors.white),
                 Padding(
                   padding: const EdgeInsets.only(left: 9.0),
-                  child: calButton(' x ',Color(0xFF5079DF),Colors.white),
+                  child: calButton(' x ',const Color(0xFF5079DF),Colors.white),
                 ),
               ],
             ),
@@ -116,7 +121,7 @@ class _CalculatorState extends State<Calculator> {
                 calButton('6',Colors.blueGrey[500]!,Colors.white),
                 Padding(
                   padding: const EdgeInsets.only(left: 9.0),
-                  child: calButton(' − ',Color(0xFF5079DF),Colors.white),
+                  child: calButton(' − ',const Color(0xFF5079DF),Colors.white),
                 ),
               ],
             ),
@@ -129,7 +134,7 @@ class _CalculatorState extends State<Calculator> {
                 calButton('3',Colors.blueGrey[500]!,Colors.white),
                 Padding(
                   padding:const EdgeInsets.only(left: 9.0),
-                  child: calButton(' + ',Color(0xFF5079DF),Colors.white),
+                  child: calButton(' + ',const Color(0xFF5079DF),Colors.white),
                 ),
               ],
             ),
@@ -161,7 +166,7 @@ class _CalculatorState extends State<Calculator> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 3.5),
-                  child: calButton(' = ',Color(0xFF5078DF),Colors.white),
+                  child: calButton(' = ',const Color(0xFF5078DF),Colors.white),
                 ),
               ],
             ),
@@ -231,13 +236,13 @@ class _CalculatorState extends State<Calculator> {
       finalResult = doesContainDecimal(result);
     } else if(btnText == '.') {
       if(!result.toString().contains('.')) {
-        result = result.toString()+'.';
+        result = '$result.';
       }
       finalResult = result;
     }
 
     else if(btnText == '+/-') {
-      result.toString().startsWith(' − ') ? result = result.toString().substring(1): result = ' − '+result.toString();
+      result.toString().startsWith(' − ') ? result = result.toString().substring(1): result = ' − $result';
       finalResult = result;
 
     }
@@ -255,23 +260,23 @@ class _CalculatorState extends State<Calculator> {
   }
 
   String add() {
-    result = (numOne + numTwo).toString();
+    result = (numOne + numTwo).toStringAsFixed(4);
     numOne = double.parse(result);
     return doesContainDecimal(result);
   }
 
   String sub() {
-    result = (numOne - numTwo).toString();
+    result = (numOne - numTwo).toStringAsFixed(4);
     numOne = double.parse(result);
     return doesContainDecimal(result);
   }
   String mul() {
-    result = (numOne * numTwo).toString();
+    result = (numOne * numTwo).toStringAsFixed(4);
     numOne = double.parse(result);
     return doesContainDecimal(result);
   }
   String div() {
-    result = (numOne / numTwo).toString();
+    result = (numOne / numTwo).toStringAsFixed(4);
     numOne = double.parse(result);
     return doesContainDecimal(result);
   }
@@ -280,8 +285,9 @@ class _CalculatorState extends State<Calculator> {
 
     if(result.toString().contains('.')) {
       List<String> splitDecimal = result.toString().split('.');
-      if(!(int.parse(splitDecimal[1]) > 0))
+      if(!(int.parse(splitDecimal[1]) > 0)) {
         return result = splitDecimal[0].toString();
+      }
     }
     return result;
   }
